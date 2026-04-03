@@ -1,0 +1,414 @@
+@font-face {
+  font-family: "IM Fell English";
+  src: url("/assets/fonts/IMFellEnglish-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Literata";
+  src: url("/assets/fonts/Literata-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --accent: #d35b3f;
+  --accent-soft: #5c120e;
+  --bone: #f2eadc;
+  --dust: rgba(242, 234, 220, 0.76);
+  --frame: rgba(255, 235, 220, 0.36);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top, color-mix(in srgb, var(--accent) 52%, black) 0%, rgba(0, 0, 0, 0) 48%),
+    linear-gradient(180deg, #190404 0%, #020202 100%);
+  color: var(--bone);
+}
+
+body {
+  font-family: "Literata", Georgia, serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+#scene,
+.screen-noise,
+.scanlines,
+.rim-light,
+.frame,
+.intro,
+.caption,
+.hud {
+  position: absolute;
+  inset: 0;
+}
+
+#scene {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.screen-noise,
+.scanlines,
+.rim-light,
+.frame {
+  pointer-events: none;
+}
+
+.screen-noise {
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px),
+    radial-gradient(circle at 80% 45%, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px),
+    radial-gradient(circle at 55% 80%, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px);
+  background-size: 180px 180px, 220px 220px, 140px 140px;
+  animation: drift-noise 10s linear infinite;
+}
+
+.scanlines {
+  opacity: 0.28;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0,
+      rgba(255, 255, 255, 0.08) 1px,
+      rgba(0, 0, 0, 0.12) 1px,
+      rgba(0, 0, 0, 0.12) 3px
+    );
+  background-size: 100% 4px;
+  mix-blend-mode: overlay;
+}
+
+.rim-light {
+  background:
+    radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--accent) 62%, white) 0%, transparent 44%),
+    radial-gradient(circle at center, transparent 58%, rgba(0, 0, 0, 0.68) 100%);
+  opacity: 0.56;
+}
+
+.frame {
+  padding: clamp(1rem, 2vw, 1.75rem);
+}
+
+.frame__label {
+  position: absolute;
+  top: 1.2rem;
+  font-family: "Cascadia Mono", "Courier New", monospace;
+  font-size: clamp(0.66rem, 0.5rem + 0.45vw, 0.9rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245, 235, 220, 0.6);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.frame__label--left {
+  left: clamp(1rem, 2vw, 1.75rem);
+}
+
+.frame__label--right {
+  right: clamp(1rem, 2vw, 1.75rem);
+  text-align: right;
+}
+
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: clamp(1rem, 2vw, 1.75rem);
+  border: 1px solid var(--frame);
+  box-shadow:
+    0 0 60px rgba(0, 0, 0, 0.3) inset,
+    0 0 80px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.frame__corner {
+  position: absolute;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-color: rgba(255, 240, 224, 0.72);
+  border-style: solid;
+}
+
+.frame__corner--tl {
+  top: 1rem;
+  left: 1rem;
+  border-width: 2px 0 0 2px;
+}
+
+.frame__corner--tr {
+  top: 1rem;
+  right: 1rem;
+  border-width: 2px 2px 0 0;
+}
+
+.frame__corner--bl {
+  bottom: 1rem;
+  left: 1rem;
+  border-width: 0 0 2px 2px;
+}
+
+.frame__corner--br {
+  right: 1rem;
+  bottom: 1rem;
+  border-width: 0 2px 2px 0;
+}
+
+.intro {
+  display: grid;
+  place-items: center;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease,
+    visibility 0.7s ease;
+}
+
+.intro--hidden {
+  opacity: 0;
+  transform: scale(1.02);
+  visibility: hidden;
+}
+
+.intro::before {
+  content: "";
+  position: absolute;
+  width: min(88vw, 56rem);
+  height: min(72vh, 40rem);
+  background:
+    radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 46%),
+    linear-gradient(180deg, rgba(14, 10, 12, 0.88) 0%, rgba(6, 4, 6, 0.82) 100%);
+  border: 1px solid rgba(255, 236, 218, 0.28);
+  box-shadow:
+    0 0 80px rgba(0, 0, 0, 0.32),
+    inset 0 0 90px color-mix(in srgb, var(--accent) 16%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.intro > * {
+  position: relative;
+  z-index: 1;
+  width: min(78vw, 42rem);
+}
+
+.intro__eyebrow {
+  margin: 0 0 1rem;
+  font-family: "Cascadia Mono", "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.36em;
+  color: rgba(246, 234, 220, 0.7);
+  font-size: clamp(0.7rem, 0.6rem + 0.4vw, 1rem);
+}
+
+.intro__title {
+  margin: 0;
+  font-family: "IM Fell English", "Times New Roman", serif;
+  font-size: clamp(2.6rem, 8vw, 6.8rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+  text-shadow:
+    0 0 26px color-mix(in srgb, var(--accent) 38%, transparent),
+    0 0 80px rgba(0, 0, 0, 0.32);
+}
+
+.intro__body {
+  margin: 1.2rem 0 0;
+  max-width: 38rem;
+  font-size: clamp(1rem, 0.95rem + 0.38vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--dust);
+}
+
+.intro__actions {
+  margin-top: 1.8rem;
+}
+
+.start-button {
+  border: 1px solid rgba(255, 236, 220, 0.5);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 58%, rgba(0, 0, 0, 0.36)) 0%, rgba(8, 5, 6, 0.7) 100%);
+  color: var(--bone);
+  padding: 0.95rem 1.5rem;
+  min-width: 16rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.start-button:hover,
+.start-button:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(255, 242, 232, 0.78);
+  box-shadow:
+    0 0 30px color-mix(in srgb, var(--accent) 48%, transparent),
+    0 0 48px rgba(255, 255, 255, 0.12);
+}
+
+.intro__foot {
+  margin-top: 1rem;
+  color: rgba(242, 234, 220, 0.58);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.intro__foot span {
+  color: rgba(255, 244, 235, 0.88);
+}
+
+.caption {
+  display: grid;
+  align-content: end;
+  justify-items: start;
+  padding: clamp(1.4rem, 3vw, 2.6rem);
+  width: min(100%, 46rem);
+  gap: 0.35rem;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+body:not(.started) .caption {
+  opacity: 0.18;
+  transform: translateY(0.8rem);
+}
+
+.caption__kicker {
+  margin: 0;
+  font-family: "Cascadia Mono", "Courier New", monospace;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  color: rgba(245, 232, 220, 0.72);
+}
+
+.caption__title {
+  margin: 0;
+  font-family: "IM Fell English", "Times New Roman", serif;
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  line-height: 0.95;
+  text-wrap: balance;
+  text-shadow: 0 0 24px rgba(0, 0, 0, 0.32);
+}
+
+.caption__body {
+  margin: 0;
+  max-width: 40rem;
+  font-size: clamp(1rem, 0.92rem + 0.35vw, 1.15rem);
+  line-height: 1.55;
+  color: rgba(242, 234, 220, 0.84);
+}
+
+.hud {
+  display: grid;
+  align-content: start;
+  justify-items: end;
+  gap: 0.45rem;
+  padding: clamp(1.2rem, 2.5vw, 1.9rem);
+  pointer-events: none;
+}
+
+.hud__row {
+  display: flex;
+  gap: 0.7rem;
+  align-items: baseline;
+  padding: 0.28rem 0.4rem;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.28) 28%, rgba(0, 0, 0, 0.55) 100%);
+  min-width: 16rem;
+  justify-content: flex-end;
+}
+
+.hud__label {
+  font-family: "Cascadia Mono", "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  color: rgba(242, 234, 220, 0.5);
+}
+
+.hud__value {
+  font-family: "Cascadia Mono", "Courier New", monospace;
+  color: rgba(250, 244, 235, 0.88);
+  font-size: 0.84rem;
+}
+
+.hud__row--muted {
+  opacity: 0.84;
+}
+
+@keyframes drift-noise {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-3%, 2%, 0);
+  }
+}
+
+@media (max-width: 900px) {
+  .frame__label--right {
+    display: none;
+  }
+
+  .caption {
+    width: 100%;
+    padding-right: 1.2rem;
+  }
+
+  .hud {
+    align-content: end;
+    justify-items: start;
+    padding-top: 6rem;
+  }
+
+  .hud__row {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .intro > * {
+    width: min(88vw, 28rem);
+  }
+
+  .intro::before {
+    width: min(92vw, 36rem);
+    height: min(78vh, 40rem);
+  }
+
+  .start-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .caption__title {
+    max-width: 15ch;
+  }
+}
