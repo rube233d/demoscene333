@@ -20,7 +20,7 @@ npm run preview
 
 ## GitHub Pages
 
-После пуша в `main` workflow из `.github/workflows/deploy-pages.yml` собирает проект и выкладывает `dist` на GitHub Pages.
+Для Pages можно публиковать статическую сборку из папки `docs/`.
 
 ## Управление
 
