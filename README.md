@@ -2,6 +2,10 @@
 
 Браузерная демосцена про AI slop, сознание и смысл жизни.
 
+[Open the demoscene](https://rube233d.github.io/demoscene333/)
+
+[![Demoscene preview](./README-preview.png)](https://rube233d.github.io/demoscene333/)
+
 ## Запуск
 
 ```bash
